@@ -13,6 +13,48 @@ datasource db {
 }
 
 ///////////////////////////////////
+//Tables Site//////////////////////
+///////////////////////////////////
+
+model Site {
+  id        Int    @id @default(autoincrement())
+  name      String
+  street    String
+  streetNum Int
+  zip_code  Int
+  rooms     Room[]
+}
+
+///////////////////////////////////
+//Tables Room//////////////////////
+///////////////////////////////////
+
+model Room {
+  id       Int       @id @default(autoincrement())
+  name     String
+  site     Site      @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  siteId   Int
+  meetings Meeting[]
+}
+
+///////////////////////////////////
+//Tables Meeting///////////////////
+///////////////////////////////////
+
+model Meeting {
+  id        Int      @id @default(autoincrement())
+  name      String
+  date      DateTime
+  hour_from DateTime
+  hour_to   DateTime
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  roomId    Int      @unique
+  author    User     @relation(name: "author", fields: [authorId], references: [id])
+  authorId  String   @unique
+  attendees User[]   @relation(name: "attendee")
+}
+
+///////////////////////////////////
 //Tables nécessaires pour Auth.js//
 ///////////////////////////////////
 
@@ -27,8 +69,10 @@ model User {
   // Optional for WebAuthn support
   Authenticator Authenticator[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  meetings_as_attendee Meeting[] @relation(name: "attendee")
+  meetings_as_author   Meeting[] @relation(name: "author")
 }
 
 model Account {

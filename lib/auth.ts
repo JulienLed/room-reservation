@@ -1,11 +1,10 @@
 //La config de Auth.js
-
-import NextAuth from "next-auth";
-// Il faut définir pourquoi ça donne une erreur
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { prisma } from "@/lib/prisma";
+import NextAuth from "next-auth";
+import Google from "next-auth/providers/google";
+import { prisma } from "./prisma";
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  providers: [],
+  providers: [Google],
 });
