@@ -1,5 +1,6 @@
 //Ajout de Header.tsx dans le Layout
 import Header from "@/components/layout/header/Header";
+import React from "react";
 export default function MainLayout({
   children,
 }: Readonly<{
@@ -10,7 +11,7 @@ export default function MainLayout({
       <header className="w-full">
         <Header />
       </header>
-      {children}
+      <main>{children}</main>
     </>
   );
 }

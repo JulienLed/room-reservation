@@ -22,11 +22,11 @@ export default function Day() {
   });
   return (
     <div className="flex-1 grid grid-cols-[30%_70%] justify-items-center w-full">
-      {formatSlots.map((slot) => (
-        <>
+      {formatSlots.map((slot, i) => (
+        <div key={i}>
           <div>{slot}</div>
           <div></div>
-        </>
+        </div>
       ))}
     </div>
   );

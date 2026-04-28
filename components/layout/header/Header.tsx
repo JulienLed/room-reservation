@@ -10,6 +10,7 @@ export default async function Header() {
         {/* Section où se trouve les infos visibles de la session si le user est connecté, sinon un bouton "Se connecter" */}
         <InfoSession session={session} />
       </div>
+      <div className="w-full flex! justify-start! pl-10"></div>
     </div>
   );
 }
