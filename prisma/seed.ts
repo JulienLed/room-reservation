@@ -1,4 +1,4 @@
-import { SiteCreateInput } from "@/generated/prisma/models";
+import { SiteCreateInput, UserCreateInput } from "@/generated/prisma/models";
 import { prisma } from "@/lib/prisma";
 
 //Seed qui reprends les sites et les rooms
@@ -89,9 +89,27 @@ const sitesData: SiteCreateInput[] = [
   },
 ];
 
+const usersData: UserCreateInput[] = [
+  {
+    name: "Jhon",
+    email: "jhon@gmail.com",
+  },
+  {
+    name: "Maria",
+    email: "maria@gmail.com",
+  },
+  {
+    name: "Kevin",
+    email: "kevin@gmail.com",
+  },
+];
+
 export async function main() {
   for (let site of sitesData) {
     await prisma.site.create({ data: site });
+  }
+  for (let user of usersData) {
+    await prisma.user.create({ data: user });
   }
 }
 

@@ -1,19 +1,28 @@
 import { describe, expect, test } from "vitest";
 import meetingIsValid from "./meetingIsValid";
 
+const now = new Date();
+
+const makeTomorrowDateTime = (day: number, hour: number, minute = 0) => {
+  const date = new Date(now);
+  date.setDate(now.getDate() + day);
+  date.setHours(now.getHours() + hour);
+  date.setMinutes(now.getMinutes() + minute);
+  return date;
+};
+
 describe("meetingIsValid", () => {
   test("vérifie que l'heure de début est plus petite que l'heure de fin", () => {
     expect(
       meetingIsValid(
         //On donne un objet meeting fake
         {
-          id: 1,
           name: "Réunion test",
-          date: new Date("2026-04-25"),
-          hour_from: new Date("2026-04-25T10:00:00"),
-          hour_to: new Date("2026-04-25T09:00:00"),
+          hour_from: makeTomorrowDateTime(1, 9),
+          hour_to: makeTomorrowDateTime(1, 8),
           roomId: 1,
           authorId: "123456789",
+          attendees: [],
         },
         [],
       ),
@@ -23,13 +32,12 @@ describe("meetingIsValid", () => {
     expect(
       meetingIsValid(
         {
-          id: 1,
           name: "Réunion test",
-          date: new Date("2026-04-25"),
-          hour_from: new Date("2026-04-25T10:00:00"),
-          hour_to: new Date("2026-04-25T09:30:00"),
+          hour_from: makeTomorrowDateTime(1, 8),
+          hour_to: makeTomorrowDateTime(1, 8, 30),
           roomId: 1,
           authorId: "123456789",
+          attendees: [],
         },
         [],
       ),
@@ -44,11 +52,11 @@ describe("meetingIsValid", () => {
         {
           id: 1,
           name: "Réunion test",
-          date: in20Min,
           hour_from: in20Min,
           hour_to: in80Min,
           roomId: 1,
           authorId: "123456789",
+          attendees: [],
         },
         [],
       ),
@@ -60,11 +68,11 @@ describe("meetingIsValid", () => {
         {
           id: 1,
           name: "Réunion test",
-          date: new Date("2026-04-25"),
-          hour_from: new Date("2026-04-25T15:00:00"),
-          hour_to: new Date("2026-04-25T17:00:00"),
+          hour_from: makeTomorrowDateTime(1, 15),
+          hour_to: makeTomorrowDateTime(1, 17),
           roomId: 1,
           authorId: "123456789",
+          attendees: [],
         },
         [],
       ),
@@ -76,11 +84,11 @@ describe("meetingIsValid", () => {
         {
           id: 1,
           name: "Réunion test",
-          date: new Date("2026-04-25"),
-          hour_from: new Date("2026-04-25T07:00:00"),
-          hour_to: new Date("2026-04-25T09:00:00"),
+          hour_from: makeTomorrowDateTime(1, 7),
+          hour_to: makeTomorrowDateTime(1, 8),
           roomId: 1,
           authorId: "123456789",
+          attendees: [],
         },
         [],
       ),
@@ -92,27 +100,24 @@ describe("meetingIsValid", () => {
       {
         id: 1,
         name: "Réunion test 1",
-        date: new Date("2026-04-26"),
-        hour_from: new Date("2026-04-26T09:00:00"),
-        hour_to: new Date("2026-04-26T10:00:00"),
+        hour_from: makeTomorrowDateTime(1, 9),
+        hour_to: makeTomorrowDateTime(1, 10),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 2,
         name: "Réunion test 2",
-        date: new Date("2026-04-27"),
-        hour_from: new Date("2026-04-27T10:00:00"),
-        hour_to: new Date("2026-04-27T11:00:00"),
+        hour_from: makeTomorrowDateTime(1, 10),
+        hour_to: makeTomorrowDateTime(1, 11),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 3,
         name: "Réunion test 3",
-        date: new Date("2026-04-28"),
-        hour_from: new Date("2026-04-28T13:00:00"),
-        hour_to: new Date("2026-04-28T14:00:00"),
+        hour_from: makeTomorrowDateTime(1, 13),
+        hour_to: makeTomorrowDateTime(1, 14),
         roomId: 1,
         authorId: "123456789",
       },
@@ -122,11 +127,11 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: "Réunion test 4",
-          date: new Date("2026-04-28"),
-          hour_from: new Date("2026-04-28T13:30:00"),
-          hour_to: new Date("2026-04-28T15:00:00"),
+          hour_from: makeTomorrowDateTime(1, 13, 30),
+          hour_to: makeTomorrowDateTime(1, 15),
           roomId: 1,
           authorId: "123456789",
+          attendees: [],
         },
         prismaDatas,
       ),
@@ -138,27 +143,24 @@ describe("meetingIsValid", () => {
       {
         id: 1,
         name: "Réunion test 1",
-        date: new Date("2026-04-26"),
-        hour_from: new Date("2026-04-26T09:00:00"),
-        hour_to: new Date("2026-04-26T10:00:00"),
+        hour_from: makeTomorrowDateTime(1, 9),
+        hour_to: makeTomorrowDateTime(1, 10),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 2,
         name: "Réunion test 2",
-        date: new Date("2026-04-27"),
-        hour_from: new Date("2026-04-27T10:00:00"),
-        hour_to: new Date("2026-04-27T11:00:00"),
+        hour_from: makeTomorrowDateTime(1, 10),
+        hour_to: makeTomorrowDateTime(1, 11),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 3,
         name: "Réunion test 3",
-        date: new Date("2026-04-28"),
-        hour_from: new Date("2026-04-28T13:00:00"),
-        hour_to: new Date("2026-04-28T14:00:00"),
+        hour_from: makeTomorrowDateTime(1, 13),
+        hour_to: makeTomorrowDateTime(1, 14),
         roomId: 1,
         authorId: "123456789",
       },
@@ -168,11 +170,11 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: "Réunion test 4",
-          date: new Date("2026-04-28"),
-          hour_from: new Date("2026-04-28T12:00:00"),
-          hour_to: new Date("2026-04-28T15:00:00"),
+          hour_from: makeTomorrowDateTime(1, 12),
+          hour_to: makeTomorrowDateTime(1, 15),
           roomId: 1,
           authorId: "123456789",
+          attendees: [],
         },
         prismaDatas,
       ),
@@ -184,27 +186,11 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: null as any,
-          date: new Date("2026-04-28T12:00:00"),
-          hour_from: new Date("2026-04-28T12:00:00"),
-          hour_to: new Date("2026-04-28T15:00:00"),
+          hour_from: makeTomorrowDateTime(1, 12),
+          hour_to: makeTomorrowDateTime(1, 15),
           roomId: 1,
           authorId: "123456789",
-        },
-        [],
-      ),
-    ).toBe(false);
-  });
-  test("vérifie que date est rempli", () => {
-    expect(
-      meetingIsValid(
-        {
-          id: 4,
-          name: "Réunion test 1",
-          date: null as any,
-          hour_from: new Date("2026-04-28T12:00:00"),
-          hour_to: new Date("2026-04-28T15:00:00"),
-          roomId: 1,
-          authorId: "123456789",
+          attendees: [],
         },
         [],
       ),
@@ -216,11 +202,11 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: "Réunion test 1",
-          date: new Date("2026-04-28T12:00:00"),
           hour_from: null as any,
-          hour_to: new Date("2026-04-28T15:00:00"),
+          hour_to: makeTomorrowDateTime(1, 11),
           roomId: 1,
           authorId: "123456789",
+          attendees: [],
         },
         [],
       ),
@@ -232,11 +218,11 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: "Réunion test 1",
-          date: new Date("2026-04-28T12:00:00"),
-          hour_from: new Date("2026-04-28T12:00:00"),
+          hour_from: makeTomorrowDateTime(1, 13),
           hour_to: null as any,
           roomId: 1,
           authorId: "123456789",
+          attendees: [],
         },
         [],
       ),
@@ -248,27 +234,24 @@ describe("meetingIsValid", () => {
       {
         id: 1,
         name: "Réunion test 1",
-        date: new Date("2026-04-26"),
-        hour_from: new Date("2026-04-26T09:00:00"),
-        hour_to: new Date("2026-04-26T10:00:00"),
+        hour_from: makeTomorrowDateTime(1, 9),
+        hour_to: makeTomorrowDateTime(1, 10),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 2,
         name: "Réunion test 2",
-        date: new Date("2026-04-27"),
-        hour_from: new Date("2026-04-27T10:00:00"),
-        hour_to: new Date("2026-04-27T11:00:00"),
+        hour_from: makeTomorrowDateTime(1, 10),
+        hour_to: makeTomorrowDateTime(1, 11),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 3,
         name: "Réunion test 3",
-        date: new Date("2026-04-28"),
-        hour_from: new Date("2026-04-28T13:00:00"),
-        hour_to: new Date("2026-04-28T14:00:00"),
+        hour_from: makeTomorrowDateTime(1, 13),
+        hour_to: makeTomorrowDateTime(1, 14),
         roomId: 1,
         authorId: "123456789",
       },
@@ -278,11 +261,11 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: "Réunion test 4",
-          date: new Date("2026-04-29"),
-          hour_from: new Date("2026-04-29T14:00:00"),
-          hour_to: new Date("2026-04-29T15:00:00"),
+          hour_from: makeTomorrowDateTime(1, 14),
+          hour_to: makeTomorrowDateTime(1, 15),
           roomId: 1,
           authorId: "123456789",
+          attendees: [],
         },
         prismaDatas,
       ),

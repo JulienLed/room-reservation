@@ -44,13 +44,12 @@ model Room {
 model Meeting {
   id        Int      @id @default(autoincrement())
   name      String
-  date      DateTime
   hour_from DateTime
   hour_to   DateTime
   room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  roomId    Int      @unique
+  roomId    Int
   author    User     @relation(name: "author", fields: [authorId], references: [id])
-  authorId  String   @unique
+  authorId  String
   attendees User[]   @relation(name: "attendee")
 }
 
@@ -60,7 +59,7 @@ model Meeting {
 
 model User {
   id            String          @id @default(cuid())
-  name          String?
+  name          String          @default("Nobody")
   email         String          @unique
   emailVerified DateTime?
   image         String?

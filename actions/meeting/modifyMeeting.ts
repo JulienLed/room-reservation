@@ -1,13 +1,18 @@
 "use server";
 
-import { Meeting, User } from "@/generated/prisma/client";
+import { User } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import canModify from "@/lib/utils/meeting/canModify";
 import meetingIsValid from "@/lib/utils/meeting/meetingIsValid";
+import { MeetingFormDatas } from "@/app/(main)/site/[siteId]/room/[roomId]/type";
+import { CalendarEventExternal } from "@schedule-x/calendar";
 
-export default async function (newMeeting: Meeting, oldMeeting: Meeting) {
-  const { name, date, hour_from, hour_to, roomId } = newMeeting;
+export default async function (
+  newMeeting: MeetingFormDatas,
+  oldMeeting: CalendarEventExternal,
+) {
+  const { name, hour_from, hour_to, roomId, attendees } = newMeeting;
   const { id } = oldMeeting;
   try {
     //Obtenir la session
@@ -24,12 +29,25 @@ export default async function (newMeeting: Meeting, oldMeeting: Meeting) {
       },
     });
 
+    //Obtenir l'autheur par meeting ID
+    const authorId = await prisma.meeting.findUnique({
+      where: {
+        id: Number(id),
+      },
+      select: {
+        authorId: true,
+      },
+    });
+
+    //Si on ne trouve pas de meeting avec l'ID, on lance une erreur
+    if (!authorId) throw new Error("Pas de réunion avec ce ID");
+
     //Si les données sont incorrectes, on lance une erreur
     if (!meetingIsValid(newMeeting, meetings))
       throw new Error("Les données de la réunion ne sont pas valides");
 
     //Vérification de l'auteur de la réunion pour modification
-    if (!canModify(oldMeeting, userId))
+    if (!canModify(authorId.authorId, userId))
       throw new Error(
         "Vous ne pouvez pas modifier cette réunion, vous n'en êtes pas l'auteur",
       );
@@ -37,14 +55,16 @@ export default async function (newMeeting: Meeting, oldMeeting: Meeting) {
     //Update de la réunion
     const meetingUpdated = await prisma.meeting.update({
       where: {
-        id,
+        id: Number(id),
       },
       data: {
         name,
-        date,
         hour_from,
         hour_to,
         roomId,
+        attendees: {
+          connect: attendees.map((attendee) => ({ id: attendee })),
+        },
       },
     });
     return {

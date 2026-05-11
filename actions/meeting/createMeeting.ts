@@ -1,12 +1,12 @@
 "use server";
 
-import { Meeting } from "@/generated/prisma/client";
+import { MeetingFormDatas } from "@/app/(main)/site/[siteId]/room/[roomId]/type";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import meetingIsValid from "@/lib/utils/meeting/meetingIsValid";
 
-export default async function (newMeeting: Meeting) {
-  const { name, date, hour_from, hour_to, roomId } = newMeeting;
+export default async function (newMeeting: MeetingFormDatas) {
+  const { name, hour_from, hour_to, attendees, roomId } = newMeeting;
 
   try {
     //Obtenir la session
@@ -21,6 +21,10 @@ export default async function (newMeeting: Meeting) {
       where: {
         roomId,
       },
+      include: {
+        attendees: true,
+        author: true,
+      },
     });
 
     //Si les données sont incorrectes, on lance une erreur
@@ -28,22 +32,24 @@ export default async function (newMeeting: Meeting) {
       throw new Error("Les données de la réunion ne sont pas valides");
 
     //Créer la réunion
-    const meeting = await prisma.meeting.create({
+    const meetingToCreate = await prisma.meeting.create({
       data: {
         name,
-        date,
         hour_from,
         hour_to,
         roomId,
         authorId: userId,
+        attendees: {
+          connect: attendees.map((attendee) => ({ id: attendee })),
+        },
       },
     });
     return {
-      success: true,
-      message: `La réunion ${meeting.name} a bien été créée`,
+      success: true as const,
+      message: `La réunion ${meetingToCreate.name} a bien été créée`,
     };
   } catch (error) {
     console.log(error);
-    return { success: false, message: error };
+    return { success: false as const, message: error };
   }
 }

@@ -1,7 +1,8 @@
+import { MeetingFormDatas } from "@/app/(main)/site/[siteId]/room/[roomId]/type";
 import { Meeting } from "@/generated/prisma/client";
 
 export default function meetingIsValid(
-  newMeeting: Meeting,
+  newMeeting: MeetingFormDatas,
   meetings: Meeting[],
 ) {
   if (newMeeting.hour_from > newMeeting.hour_to) return false;
@@ -29,6 +30,5 @@ export default function meetingIsValid(
       return false;
   }
   if (!newMeeting.name) return false;
-  if (!newMeeting.date) return false;
   return true;
 }

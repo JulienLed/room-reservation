@@ -1,8 +1,8 @@
 //Page d'une salle
 
 import { prisma } from "@/lib/prisma";
-import RoomSchedule from "./RoomSchedule";
 import MainBreadcrumb from "@/components/layout/breadcrumb/MainBreadcrumb";
+import Agenda from "./Agenda";
 
 export default async function Page({
   params,
@@ -12,12 +12,22 @@ export default async function Page({
   //Obtention de l'Id de la room sous forme se string, provenant de l'url
   const { siteId, roomId } = await params;
   const roomIdNum = Number(roomId);
-  const siteIdNum = Number(siteId);
 
   //Obtention des réunions pour cette salle, grâce au roomId
   const meetings = await prisma.meeting.findMany({
     where: {
       roomId: roomIdNum,
+    },
+    include: {
+      attendees: true,
+    },
+  });
+
+  //Obtention de la liste des users, uniquement Id et name
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      name: true,
     },
   });
 
@@ -52,9 +62,13 @@ export default async function Page({
         <MainBreadcrumb items={items} />
       </div>
       <h2>Veuillez choisir un créneau disponible</h2>
-      <section id="agenda" className="mx-auto w-5xl">
-        {/* On passe meetings a un composant client Agenda */}
-        <RoomSchedule meetings={meetings} />
+      <section id="agenda" className="w-full px-5 pb-5 md:pb-10 md:px-10">
+        <Agenda
+          meetings={meetings}
+          room={room!}
+          users={users}
+          roomId={roomIdNum}
+        />
       </section>
     </div>
   );
