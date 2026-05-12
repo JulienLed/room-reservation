@@ -1,19 +1,17 @@
 "use server";
 
-import { User } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import canModify from "@/lib/utils/meeting/canModify";
 import meetingIsValid from "@/lib/utils/meeting/meetingIsValid";
-import { MeetingFormDatas } from "@/app/(main)/site/[siteId]/room/[roomId]/type";
-import { CalendarEventExternal } from "@schedule-x/calendar";
+import { MeetingFormDatas } from "@/app/(main)/home/site/[siteId]/room/[roomId]/type";
 
 export default async function (
   newMeeting: MeetingFormDatas,
-  oldMeeting: CalendarEventExternal,
+  oldMeetingId: string,
 ) {
   const { name, hour_from, hour_to, roomId, attendees } = newMeeting;
-  const { id } = oldMeeting;
+  const id = oldMeetingId;
   try {
     //Obtenir la session
     const session = await auth();
@@ -63,7 +61,7 @@ export default async function (
         hour_to,
         roomId,
         attendees: {
-          connect: attendees.map((attendee) => ({ id: attendee })),
+          set: attendees.map((attendee) => ({ id: attendee })),
         },
       },
     });

@@ -1,4 +1,4 @@
-import { MeetingFormDatas } from "@/app/(main)/site/[siteId]/room/[roomId]/type";
+import { MeetingFormDatas } from "@/app/(main)/home/site/[siteId]/room/[roomId]/type";
 import { Meeting } from "@/generated/prisma/client";
 
 export default function meetingIsValid(

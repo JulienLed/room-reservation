@@ -21,7 +21,7 @@ export default function Page() {
           <form
             action={async () => {
               "use server";
-              await signIn("google", { redirectTo: "/site-selection" });
+              await signIn("google", { redirectTo: "/home" });
             }}
           >
             <button

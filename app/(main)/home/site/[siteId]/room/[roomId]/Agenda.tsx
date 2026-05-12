@@ -14,6 +14,13 @@ import { MeetingWithAttendees, RoomWithSite, UsersWithIdAndName } from "./type";
 import EventDialog from "./EventDialog";
 import { useEffect, useState } from "react";
 import "temporal-polyfill/global";
+import CustomTimeGridEvent from "./CustomTimeGridEvent";
+
+//C'est ici qu'on défini les composant visibles customs de lagende schedule-x. Il doit être en-dehors de l'agenda.
+//Le keys sont celles prévues pas la librairie, et les values sont des composants customs
+const customComponents = {
+  timeGridEvent: CustomTimeGridEvent,
+};
 
 export default function Agenda({
   meetings,
@@ -86,7 +93,10 @@ export default function Agenda({
   return (
     <div>
       <div className="relative z-0">
-        <ScheduleXCalendar calendarApp={calendar} />
+        <ScheduleXCalendar
+          calendarApp={calendar}
+          customComponents={customComponents}
+        />
       </div>
       <EventDialog
         open={open}

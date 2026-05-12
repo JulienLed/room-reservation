@@ -8,7 +8,7 @@ export const proxy = auth((req) => {
     req.nextUrl.pathname !== "/sign-in"
   ) {
     //On construit l'url vers laquelle le user sera redirigée
-    const newUrl = new URL("/", req.nextUrl.origin);
+    const newUrl = new URL("/sign-in", req.nextUrl.origin);
 
     //On redirige le user vers la nouvelle url créée
     return Response.redirect(newUrl);

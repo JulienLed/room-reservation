@@ -27,11 +27,11 @@ export default async function Page({
   const items = [
     {
       label: "Sélection du site",
-      link: "/",
+      link: "/home",
     },
     {
       label: rooms[0].site.name,
-      link: `/site/${siteId}`,
+      link: `/home/site/${siteId}`,
     },
   ];
 
@@ -45,7 +45,7 @@ export default async function Page({
         {/* Liens vers toutes les salles */}
         {rooms.map((room) => {
           return (
-            <Link key={room.id} href={`/site/${siteId}/room/${room.id}`}>
+            <Link key={room.id} href={`/home/site/${siteId}/room/${room.id}`}>
               <Card className="hover:bg-accent duration-200">
                 <CardHeader>
                   <CardTitle>{room.name}</CardTitle>

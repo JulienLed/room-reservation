@@ -30,6 +30,10 @@ import {
 import { UsersWithIdAndName } from "./type";
 import { CalendarEventExternal } from "@schedule-x/calendar";
 import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { useState } from "react";
+import deleteMeeting from "@/actions/meeting/deleteMeeting";
 
 //Les schema zod du form
 const formSchema = z.object({
@@ -69,7 +73,10 @@ export default function EventForm({
   //Référence pour pouvoir afficher les nom des attendees
   const anchor = useComboboxAnchor();
 
-  //Valeurs par défault de l'event, en fonction du mode "dreate" ou "update"
+  //Le state qui ouvre ou ferme la confirmation de suppression de la réunion
+  const [delDialogOpen, setDelDialogOpen] = useState<boolean>(false);
+
+  //Valeurs par défault de l'event, en fonction du mode "create" ou "update"
   const defaultValues =
     mode === "create"
       ? {
@@ -82,7 +89,7 @@ export default function EventForm({
           attendees: [],
         }
       : {
-          name: event?.title,
+          name: event!.title,
           hour_from: getTimeFormatedToString(
             (event!.start as Temporal.ZonedDateTime).hour,
             (event!.start as Temporal.ZonedDateTime).minute,
@@ -91,7 +98,11 @@ export default function EventForm({
             (event!.end as Temporal.ZonedDateTime).hour,
             (event!.end as Temporal.ZonedDateTime).minute,
           ),
-          attendees: event?.people,
+          attendees:
+            event!.people?.map((attendee) => {
+              const response = users.find((user) => user.name === attendee);
+              return response ? response.id : "";
+            }) || [],
         };
 
   //L'initialisation de form
@@ -141,7 +152,10 @@ export default function EventForm({
         toast("Réunion bien enregistrée");
         router.refresh();
       } else {
-        toast("Problème lors de l'enregistrement de la réunion");
+        toast(
+          "Problème lors de l'enregistrement de la réunion : " +
+            response.message,
+        );
       }
     }
 
@@ -176,18 +190,39 @@ export default function EventForm({
       };
 
       //On modifie l'event via server action, et on refresh pour activer le useState de Agenda et refetch les events.
-      const response = await modifyMeeting(formatedDatas, event);
+      const response = await modifyMeeting(formatedDatas, event.id.toString());
       if (response.success) {
         setOpen(false);
         toast("Réunion bien modifiée");
         router.refresh();
       } else {
-        toast("Problème lors de l'enregistrement de la réunion");
+        toast(
+          "Problème lors de l'enregistrement de la réunion : " +
+            response.message,
+        );
       }
     }
   };
+
+  //Fonction qui prends en charge les étapes de la suppression d'une réunion, passé au composant ConfirmDialog
+  const handleDelete = async () => {
+    const response = await deleteMeeting(Number(event!.id));
+    if (response.message) {
+      setOpen(false);
+      router.refresh();
+      toast("Réunion bien supprimée");
+    } else {
+      toast(
+        "Problème lors de la suppression de la réunion : " + response.message,
+      );
+    }
+  };
+
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-2"
+    >
       <FieldGroup>
         {/* L'input pour le nom de la réunion */}
         <Controller
@@ -269,6 +304,7 @@ export default function EventForm({
                   items={users}
                   multiple
                   onValueChange={(value: string[]) => field.onChange(value)}
+                  defaultValue={defaultValues.attendees}
                 >
                   <ComboboxChips ref={anchor}>
                     <ComboboxValue>
@@ -316,8 +352,33 @@ export default function EventForm({
           }}
         />
       </FieldGroup>
-      <Button type="submit">Enregistrer</Button>
-      <Button onClick={() => setOpen(false)}>Annuler</Button>
+      <section id="form-buttons" className="grid grid-cols-4">
+        <Button className="col-span-2" type="submit">
+          Enregistrer
+        </Button>
+        <Button
+          type="button"
+          className="col-span-2"
+          onClick={() => setOpen(false)}
+        >
+          Annuler
+        </Button>
+        <Button
+          type="button"
+          onClick={() => setDelDialogOpen(true)}
+          className="col-span-2 row-start-2 col-start-3 bg-red-500 border border-white hover:bg-red-400 flex justify-evenly items-center"
+        >
+          Supprimer réunion
+          <Trash2 className="text-white w-5" />
+        </Button>
+        <ConfirmDialog
+          open={delDialogOpen}
+          setOpen={setDelDialogOpen}
+          action={() => {
+            handleDelete();
+          }}
+        />
+      </section>
     </form>
   );
 }

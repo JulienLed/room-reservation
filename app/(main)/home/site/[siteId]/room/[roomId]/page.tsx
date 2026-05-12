@@ -45,15 +45,15 @@ export default async function Page({
   const items = [
     {
       label: "Sélection du site",
-      link: "/",
+      link: "/home",
     },
     {
       label: room!.site!.name,
-      link: `/site/${siteId}`,
+      link: `/home/site/${siteId}`,
     },
     {
       label: room!.name,
-      link: `/site/${siteId}/room/${roomId}`,
+      link: `/home/site/${siteId}/room/${roomId}`,
     },
   ];
   return (

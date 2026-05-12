@@ -1,6 +1,6 @@
 "use server";
 
-import { MeetingFormDatas } from "@/app/(main)/site/[siteId]/room/[roomId]/type";
+import { MeetingFormDatas } from "@/app/(main)/home/site/[siteId]/room/[roomId]/type";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import meetingIsValid from "@/lib/utils/meeting/meetingIsValid";
