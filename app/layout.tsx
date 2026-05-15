@@ -1,7 +1,10 @@
+//Layout principal
+
 import type { Metadata } from "next";
 import "./globals.css";
 import { Nunito_Sans, Montserrat } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const montserratHeading = Montserrat({
   subsets: ["latin"],
@@ -30,7 +33,9 @@ export default function RootLayout({
       )}
     >
       <body className="flex flex-col items-center min-h-screen">
-        <main className="flex-1 flex flex-col w-full">{children}</main>
+        <main className="flex-1 flex flex-col w-full">
+          <TooltipProvider>{children}</TooltipProvider>
+        </main>
       </body>
     </html>
   );

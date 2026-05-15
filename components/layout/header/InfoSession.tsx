@@ -30,7 +30,9 @@ export default function InfoSession({ session }: { session: Session | null }) {
           ) : (
             <User />
           )}
-          <Button className="col-start-2">Vos réservations</Button>
+          <Button className="col-start-2">
+            <Link href={"/reservations"}>Vos réservations</Link>
+          </Button>
           <Button onClick={() => signOut()}>Se déconnecter</Button>
         </div>
       ) : (

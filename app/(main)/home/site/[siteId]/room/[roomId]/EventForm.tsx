@@ -34,6 +34,7 @@ import { Trash2 } from "lucide-react";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useState } from "react";
 import deleteMeeting from "@/actions/meeting/deleteMeeting";
+import { getTimeFormatedToString } from "@/lib/utils/temporal/getTimeFormatedToString";
 
 //Les schema zod du form
 const formSchema = z.object({
@@ -61,12 +62,6 @@ export default function EventForm({
   roomId: number;
   mode: string;
 }) {
-  //Fonction pour obtenir une heure formatée en string "00:00"sur base des heures et minutes en Number
-  const getTimeFormatedToString = (hour: number, minute: number) => {
-    const formatedHour = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-    return formatedHour;
-  };
-
   //Nécessaire au refresh lors de la création ou modification d'event.
   const router = useRouter();
 
