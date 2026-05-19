@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { getTimeFormatedToString } from "@/lib/utils/temporal/getTimeFormatedToString";
+import { getTimeFormatedToString } from "@/lib/utils/temporal/temporalUtils";
 
 type props = {
   calendarEvent: {

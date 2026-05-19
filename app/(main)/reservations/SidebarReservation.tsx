@@ -1,3 +1,5 @@
+//Composant du Sidebar, qui sert de filtre pour l'affichage des réunions
+
 import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
@@ -12,14 +14,12 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarInset,
   SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Meeting, Room, Site } from "@/generated/prisma/client";
 import { ChevronDown } from "lucide-react";
+import Link from "next/link";
 
 type datasProps = {
   rooms: Room[];
@@ -49,12 +49,14 @@ export default function SidebarReservation({ datas }: { datas: datasProps }) {
           <Collapsible key={site.id} className="group/collapsible">
             <SidebarGroup>
               <SidebarGroupLabel>
-                <CollapsibleTrigger className="w-full flex justify-between">
-                  <div className="flex gap-1">
+                <CollapsibleTrigger className="w-full flex items-center gap-1">
+                  <div className="flex items-center">
+                    <ChevronDown className="transition-transform group-data-[state=open]/collapsible:rotate-180 w-3" />
+                  </div>
+                  <div className="flex items-center justify-between gap-1 w-full">
                     {site.name}
                     <Badge>{meetingsBySite(site.id)}</Badge>
                   </div>
-                  <ChevronDown className="transition-transform group-data-[state=open]/collapsible:rotate-180" />
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
               <CollapsibleContent className="ml-5 pl-1 border-l overflow-hidden">
@@ -64,14 +66,22 @@ export default function SidebarReservation({ datas }: { datas: datasProps }) {
                       room.siteId === site.id && (
                         <SidebarMenu key={room.id}>
                           <SidebarMenuItem className="w-full flex gap-2 justify-between pr-2">
-                            <div className="flex gap-1">{room.name}</div>
-                            <Badge>
-                              {
-                                meetings.filter(
-                                  (meeting) => meeting.roomId === room.id,
-                                ).length
-                              }
-                            </Badge>
+                            {/* On mets dans l'URL la roomId, pour pouvoir ensuite fetch les données de la db */}
+                            <Link
+                              href={`reservations?roomId=${room.id}`}
+                              className="flex justify-between w-full"
+                            >
+                              <div className="flex gap-1">
+                                <span className="text-2xs">{room.name}</span>
+                              </div>
+                              <Badge>
+                                {
+                                  meetings.filter(
+                                    (meeting) => meeting.roomId === room.id,
+                                  ).length
+                                }
+                              </Badge>
+                            </Link>
                           </SidebarMenuItem>
                         </SidebarMenu>
                       ),

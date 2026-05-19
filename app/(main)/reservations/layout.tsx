@@ -41,7 +41,7 @@ export default async function SidebarLayout({
       </div>
       <SidebarProvider>
         <SidebarReservation datas={datas} />
-        <main>
+        <main className="flex-1 flex flex-col w-full">
           <SidebarTrigger />
           {children}
         </main>

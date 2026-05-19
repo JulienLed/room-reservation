@@ -3,11 +3,9 @@ import meetingIsValid from "./meetingIsValid";
 
 const now = new Date();
 
-const makeTomorrowDateTime = (day: number, hour: number, minute = 0) => {
+const makeTomorrowDateTime = (hour: number, minute = 0) => {
   const date = new Date(now);
-  date.setDate(now.getDate() + day);
-  date.setHours(now.getHours() + hour);
-  date.setMinutes(now.getMinutes() + minute);
+  date.setHours(hour, minute, 0, 0);
   return date;
 };
 
@@ -18,8 +16,8 @@ describe("meetingIsValid", () => {
         //On donne un objet meeting fake
         {
           name: "Réunion test",
-          hour_from: makeTomorrowDateTime(1, 9),
-          hour_to: makeTomorrowDateTime(1, 8),
+          hour_from: makeTomorrowDateTime(9),
+          hour_to: makeTomorrowDateTime(8),
           roomId: 1,
           authorId: "123456789",
           attendees: [],
@@ -33,8 +31,8 @@ describe("meetingIsValid", () => {
       meetingIsValid(
         {
           name: "Réunion test",
-          hour_from: makeTomorrowDateTime(1, 8),
-          hour_to: makeTomorrowDateTime(1, 8, 30),
+          hour_from: makeTomorrowDateTime(8),
+          hour_to: makeTomorrowDateTime(8, 30),
           roomId: 1,
           authorId: "123456789",
           attendees: [],
@@ -68,8 +66,8 @@ describe("meetingIsValid", () => {
         {
           id: 1,
           name: "Réunion test",
-          hour_from: makeTomorrowDateTime(1, 15),
-          hour_to: makeTomorrowDateTime(1, 17),
+          hour_from: makeTomorrowDateTime(15),
+          hour_to: makeTomorrowDateTime(17),
           roomId: 1,
           authorId: "123456789",
           attendees: [],
@@ -84,8 +82,8 @@ describe("meetingIsValid", () => {
         {
           id: 1,
           name: "Réunion test",
-          hour_from: makeTomorrowDateTime(1, 7),
-          hour_to: makeTomorrowDateTime(1, 8),
+          hour_from: makeTomorrowDateTime(7),
+          hour_to: makeTomorrowDateTime(8),
           roomId: 1,
           authorId: "123456789",
           attendees: [],
@@ -100,24 +98,24 @@ describe("meetingIsValid", () => {
       {
         id: 1,
         name: "Réunion test 1",
-        hour_from: makeTomorrowDateTime(1, 9),
-        hour_to: makeTomorrowDateTime(1, 10),
+        hour_from: makeTomorrowDateTime(9),
+        hour_to: makeTomorrowDateTime(10),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 2,
         name: "Réunion test 2",
-        hour_from: makeTomorrowDateTime(1, 10),
-        hour_to: makeTomorrowDateTime(1, 11),
+        hour_from: makeTomorrowDateTime(10),
+        hour_to: makeTomorrowDateTime(11),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 3,
         name: "Réunion test 3",
-        hour_from: makeTomorrowDateTime(1, 13),
-        hour_to: makeTomorrowDateTime(1, 14),
+        hour_from: makeTomorrowDateTime(13),
+        hour_to: makeTomorrowDateTime(14),
         roomId: 1,
         authorId: "123456789",
       },
@@ -127,8 +125,8 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: "Réunion test 4",
-          hour_from: makeTomorrowDateTime(1, 13, 30),
-          hour_to: makeTomorrowDateTime(1, 15),
+          hour_from: makeTomorrowDateTime(13, 30),
+          hour_to: makeTomorrowDateTime(15),
           roomId: 1,
           authorId: "123456789",
           attendees: [],
@@ -143,24 +141,24 @@ describe("meetingIsValid", () => {
       {
         id: 1,
         name: "Réunion test 1",
-        hour_from: makeTomorrowDateTime(1, 9),
-        hour_to: makeTomorrowDateTime(1, 10),
+        hour_from: makeTomorrowDateTime(9),
+        hour_to: makeTomorrowDateTime(10),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 2,
         name: "Réunion test 2",
-        hour_from: makeTomorrowDateTime(1, 10),
-        hour_to: makeTomorrowDateTime(1, 11),
+        hour_from: makeTomorrowDateTime(10),
+        hour_to: makeTomorrowDateTime(11),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 3,
         name: "Réunion test 3",
-        hour_from: makeTomorrowDateTime(1, 13),
-        hour_to: makeTomorrowDateTime(1, 14),
+        hour_from: makeTomorrowDateTime(13),
+        hour_to: makeTomorrowDateTime(14),
         roomId: 1,
         authorId: "123456789",
       },
@@ -170,8 +168,8 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: "Réunion test 4",
-          hour_from: makeTomorrowDateTime(1, 12),
-          hour_to: makeTomorrowDateTime(1, 15),
+          hour_from: makeTomorrowDateTime(12),
+          hour_to: makeTomorrowDateTime(15),
           roomId: 1,
           authorId: "123456789",
           attendees: [],
@@ -186,8 +184,8 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: null as any,
-          hour_from: makeTomorrowDateTime(1, 12),
-          hour_to: makeTomorrowDateTime(1, 15),
+          hour_from: makeTomorrowDateTime(12),
+          hour_to: makeTomorrowDateTime(15),
           roomId: 1,
           authorId: "123456789",
           attendees: [],
@@ -203,7 +201,7 @@ describe("meetingIsValid", () => {
           id: 4,
           name: "Réunion test 1",
           hour_from: null as any,
-          hour_to: makeTomorrowDateTime(1, 11),
+          hour_to: makeTomorrowDateTime(11),
           roomId: 1,
           authorId: "123456789",
           attendees: [],
@@ -218,7 +216,7 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: "Réunion test 1",
-          hour_from: makeTomorrowDateTime(1, 13),
+          hour_from: makeTomorrowDateTime(13),
           hour_to: null as any,
           roomId: 1,
           authorId: "123456789",
@@ -234,24 +232,24 @@ describe("meetingIsValid", () => {
       {
         id: 1,
         name: "Réunion test 1",
-        hour_from: makeTomorrowDateTime(1, 9),
-        hour_to: makeTomorrowDateTime(1, 10),
+        hour_from: makeTomorrowDateTime(9),
+        hour_to: makeTomorrowDateTime(10),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 2,
         name: "Réunion test 2",
-        hour_from: makeTomorrowDateTime(1, 10),
-        hour_to: makeTomorrowDateTime(1, 11),
+        hour_from: makeTomorrowDateTime(10),
+        hour_to: makeTomorrowDateTime(11),
         roomId: 1,
         authorId: "123456789",
       },
       {
         id: 3,
         name: "Réunion test 3",
-        hour_from: makeTomorrowDateTime(1, 13),
-        hour_to: makeTomorrowDateTime(1, 14),
+        hour_from: makeTomorrowDateTime(13),
+        hour_to: makeTomorrowDateTime(14),
         roomId: 1,
         authorId: "123456789",
       },
@@ -261,8 +259,8 @@ describe("meetingIsValid", () => {
         {
           id: 4,
           name: "Réunion test 4",
-          hour_from: makeTomorrowDateTime(1, 14),
-          hour_to: makeTomorrowDateTime(1, 15),
+          hour_from: makeTomorrowDateTime(14),
+          hour_to: makeTomorrowDateTime(15),
           roomId: 1,
           authorId: "123456789",
           attendees: [],

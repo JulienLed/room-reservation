@@ -34,7 +34,7 @@ import { Trash2 } from "lucide-react";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useState } from "react";
 import deleteMeeting from "@/actions/meeting/deleteMeeting";
-import { getTimeFormatedToString } from "@/lib/utils/temporal/getTimeFormatedToString";
+import { getTimeFormatedToString } from "@/lib/utils/temporal/temporalUtils";
 
 //Les schema zod du form
 const formSchema = z.object({
