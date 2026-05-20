@@ -64,10 +64,13 @@ export default async function Page({
     include: {
       attendees: true,
     },
+    orderBy: {
+      hour_from: "desc",
+    },
   });
 
   return (
-    <div className="flex flex-col w-[90%] mx-auto">
+    <div className="flex flex-col w-[90%] mx-auto mt-5">
       <Card>
         <CardHeader>
           <CardTitle>{site.name}</CardTitle>
