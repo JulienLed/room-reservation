@@ -27,7 +27,7 @@ export default async function ShowMeeting({
   const status = meetingStatus(meeting);
 
   return (
-    <div className="flex gap-2 border items-center border-muted-foreground/20 rounded-md p-2">
+    <div className="flex gap-2 border items-center justify-evenly border-muted-foreground/20 rounded-md p-2">
       <section
         id="meeting-date-square"
         className="flex flex-col justify-center items-center leading-2 rounded-sm bg-primary-foreground p-1"

@@ -10,6 +10,8 @@ import {
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import ShowMeeting from "./ShowMeeting";
+import Link from "next/link";
+import { getDateFormatedToString } from "@/lib/utils/temporal/temporalUtils";
 
 export default async function Page({
   searchParams,
@@ -70,12 +72,12 @@ export default async function Page({
   });
 
   return (
-    <div className="flex flex-col w-[90%] mx-auto mt-5">
+    <div className="flex flex-col w-[50%] mx-auto mt-5">
       <Card>
         <CardHeader>
           <CardTitle>{site.name}</CardTitle>
+          <CardDescription>{`${site.street}, ${site.streetNum} - ${site.zip_code}`}</CardDescription>
         </CardHeader>
-        <CardDescription>{`${site.street}, ${site.streetNum} - ${site.zip_code}`}</CardDescription>
         <CardContent>
           <section id="room-reservations">
             <h3 className="text-base">{room.name}</h3>
@@ -85,7 +87,11 @@ export default async function Page({
               <ul className="flex flex-col gap-2">
                 {meetings.map((meeting) => (
                   <li key={meeting.id}>
-                    <ShowMeeting meeting={meeting} />
+                    <Link
+                      href={`/home/site/${siteId}/room/${roomId}?date=${getDateFormatedToString(meeting.hour_from)}`}
+                    >
+                      <ShowMeeting meeting={meeting} />
+                    </Link>
                   </li>
                 ))}
               </ul>

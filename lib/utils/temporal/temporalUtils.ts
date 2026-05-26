@@ -13,3 +13,11 @@ export function getTimeFormatedToString(hour: number, minute: number) {
   const formatedHour = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
   return formatedHour;
 }
+
+//Fonction pour obtenir une date sn string "aaaa-mm-dd"
+export function getDateFormatedToString(date: Date) {
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const year = date.getFullYear().toString();
+  return `${year}-${month}-${day}`;
+}

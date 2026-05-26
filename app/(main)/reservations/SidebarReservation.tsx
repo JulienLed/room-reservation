@@ -42,7 +42,7 @@ export default function SidebarReservation({ datas }: { datas: datasProps }) {
   };
 
   return (
-    <Sidebar variant="floating" className="h-fit mt-[10%]">
+    <Sidebar variant="floating" className="h-fit mt-[10%] ml-[10%]">
       <SidebarHeader>Vos réservations</SidebarHeader>
       <SidebarContent>
         {sites.map((site) => (

@@ -15,9 +15,10 @@ import EventDialog from "./EventDialog";
 import { useEffect, useState } from "react";
 import "temporal-polyfill/global";
 import CustomTimeGridEvent from "./CustomTimeGridEvent";
+import { getDateFormatedToString } from "@/lib/utils/temporal/temporalUtils";
 
-//C'est ici qu'on défini les composant visibles customs de lagende schedule-x. Il doit être en-dehors de l'agenda.
-//Le keys sont celles prévues pas la librairie, et les values sont des composants customs
+//C'est ici qu'on défini les composant visibles customs de l'agende schedule-x. Il doit être en-dehors de l'agenda.
+//Les keys sont celles prévues pas la librairie, et les values sont des composants customs
 const customComponents = {
   timeGridEvent: CustomTimeGridEvent,
 };
@@ -27,11 +28,13 @@ export default function Agenda({
   room,
   users,
   roomId,
+  date,
 }: {
   meetings: MeetingWithAttendees[];
   room: RoomWithSite;
   users: UsersWithIdAndName;
   roomId: number;
+  date: string | null;
 }) {
   const eventsService = useState(() => createEventsServicePlugin())[0];
   const [open, setOpen] = useState(false);
@@ -70,6 +73,9 @@ export default function Agenda({
     timezone: "Europe/Berlin",
     theme: "shadcn",
     plugins: [eventsService],
+    selectedDate: Temporal.PlainDate.from(
+      date || getDateFormatedToString(new Date()),
+    ),
     callbacks: {
       //Va ouvrir un Dialog pour créer un event
       onDoubleClickDateTime(dateTime: Temporal.ZonedDateTime, e?: UIEvent) {

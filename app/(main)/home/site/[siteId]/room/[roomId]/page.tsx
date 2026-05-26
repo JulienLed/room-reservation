@@ -6,11 +6,14 @@ import Agenda from "./Agenda";
 
 export default async function Page({
   params,
+  searchParams,
 }: {
   params: Promise<{ siteId: string; roomId: string }>;
+  searchParams: Promise<{ date: string | null }>;
 }) {
   //Obtention de l'Id de la room sous forme se string, provenant de l'url
   const { siteId, roomId } = await params;
+  const { date } = await searchParams;
   const roomIdNum = Number(roomId);
 
   //Obtention des réunions pour cette salle, grâce au roomId
@@ -68,6 +71,7 @@ export default async function Page({
           room={room!}
           users={users}
           roomId={roomIdNum}
+          date={date}
         />
       </section>
     </div>
