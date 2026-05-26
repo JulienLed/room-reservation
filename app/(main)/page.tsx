@@ -8,10 +8,12 @@ export default async function Page() {
   const session = await auth();
   return (
     <div className="flex flex-col items-center w-full">
-      <h2>Bienvenue sur le site de réservation de salle.</h2>
+      <h2 className="text-center">
+        Bienvenue sur le site de réservation de salle.
+      </h2>
       {!session ? (
         <>
-          <p className="mb-5">
+          <p className="mb-5 text-center">
             Veuillez vous connecter pour réserver une salle.
           </p>
           <section

@@ -37,11 +37,11 @@ export default async function Page({
 
   return (
     <div className="flex flex-col items-center w-full">
-      <div className="w-full flex justify-start! pl-10">
+      <div className="w-full flex justify-start! md:pl-10">
         <MainBreadcrumb items={items} />
       </div>
       <h2>Veuillez sélectionner la salle</h2>
-      <div className="grid grid-cols-2 gap-5 w-2xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-1 md:gap-5 w-[90%] md:w-2xl">
         {/* Liens vers toutes les salles */}
         {rooms.map((room) => {
           return (

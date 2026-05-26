@@ -10,7 +10,7 @@ export default function Page() {
       className="flex-1 flex justify-center items-center w-full"
     >
       {/* Card avec les options de connections */}
-      <Card className="min-w-md max-w-xl">
+      <Card className="w-65">
         <CardHeader>
           <CardTitle className="text-center">
             Se connecter / Créer un compte

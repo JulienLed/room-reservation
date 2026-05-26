@@ -61,10 +61,10 @@ export default async function Page({
   ];
   return (
     <div className="flex flex-col items-center w-full">
-      <div className="w-full flex justify-start! pl-10">
+      <div className="w-full flex justify-start! md:pl-10">
         <MainBreadcrumb items={items} />
       </div>
-      <h2>Veuillez choisir un créneau disponible</h2>
+      <h2 className="text-center">Veuillez choisir un créneau disponible</h2>
       <section id="agenda" className="w-full px-5 pb-5 md:pb-10 md:px-10">
         <Agenda
           meetings={meetings}
