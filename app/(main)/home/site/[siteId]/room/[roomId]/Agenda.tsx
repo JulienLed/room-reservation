@@ -16,6 +16,8 @@ import { useEffect, useState } from "react";
 import "temporal-polyfill/global";
 import CustomTimeGridEvent from "./CustomTimeGridEvent";
 import { getDateFormatedToString } from "@/lib/utils/temporal/temporalUtils";
+import { Button } from "@/components/ui/button";
+import { AgendaContext } from "./type";
 
 //C'est ici qu'on défini les composant visibles customs de l'agende schedule-x. Il doit être en-dehors de l'agenda.
 //Les keys sont celles prévues pas la librairie, et les values sont des composants customs
@@ -98,11 +100,23 @@ export default function Agenda({
 
   return (
     <div>
+      <Button
+        className="w-full my-1 md:hidden flex justify-center"
+        onClick={() => {
+          setEventDateTime(Temporal.Now.zonedDateTimeISO("Europe/Brussels"));
+          setMode("create");
+          setOpen(true);
+        }}
+      >
+        Nouvelle réunion
+      </Button>
       <div className="relative z-0">
-        <ScheduleXCalendar
-          calendarApp={calendar}
-          customComponents={customComponents}
-        />
+        <AgendaContext.Provider value={{ setOpen, setMode, setEvent }}>
+          <ScheduleXCalendar
+            calendarApp={calendar}
+            customComponents={customComponents}
+          />
+        </AgendaContext.Provider>
       </div>
       <EventDialog
         open={open}

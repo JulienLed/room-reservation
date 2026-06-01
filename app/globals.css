@@ -137,3 +137,17 @@
     @apply list-none
   }
 }
+
+/* Adapter max-width pour le date picker  de l'agenda en mode Mobile */
+
+@media (max-width: 700px) {
+  .date-picker-popup{
+    max-width: 200px !important
+  }
+  .sx__date-picker__month-view{
+    max-width: 200px !important
+  }
+  .sx__date-picker__years-view{
+    max-width: 200px !important
+  }
+}

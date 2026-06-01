@@ -6,6 +6,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { getTimeFormatedToString } from "@/lib/utils/temporal/temporalUtils";
+import { SquarePen } from "lucide-react";
+import { useContext } from "react";
+import { AgendaContext } from "./type";
 
 type props = {
   calendarEvent: {
@@ -18,8 +21,11 @@ type props = {
   };
 };
 
-//A continuer
 export default function CustomTimeGridEvent({ calendarEvent }: props) {
+  const context = useContext(AgendaContext);
+  if (!context) return null;
+  const { setOpen, setMode, setEvent } = context;
+
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -27,6 +33,12 @@ export default function CustomTimeGridEvent({ calendarEvent }: props) {
           <h3>
             <strong>{calendarEvent.title}</strong>
           </h3>
+          <SquarePen
+            className="absolute bottom-1 right-1 w-5"
+            onClick={() => {
+              (setOpen(true), setMode("update"), setEvent(calendarEvent));
+            }}
+          />
         </div>
       </TooltipTrigger>
       <TooltipContent side="top">

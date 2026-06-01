@@ -1,4 +1,6 @@
 import { Prisma } from "@/generated/prisma/client";
+import { CalendarEventExternal } from "@schedule-x/calendar";
+import { createContext } from "react";
 
 //Type de Room avec le Site correspondant
 export type RoomWithSite = Prisma.RoomGetPayload<{ include: { site: true } }>;
@@ -21,3 +23,9 @@ export type MeetingFormDatas = {
   roomId: number;
   authorId?: string;
 };
+
+export const AgendaContext = createContext<{
+  setOpen: (open: boolean) => void;
+  setMode: (mode: "create" | "update") => void;
+  setEvent: (calendarEvent: CalendarEventExternal) => void;
+} | null>(null);

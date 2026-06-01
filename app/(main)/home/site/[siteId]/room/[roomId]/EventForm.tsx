@@ -35,6 +35,7 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useState } from "react";
 import deleteMeeting from "@/actions/meeting/deleteMeeting";
 import { getTimeFormatedToString } from "@/lib/utils/temporal/temporalUtils";
+import { cn } from "@/lib/utils";
 
 //Les schema zod du form
 const formSchema = z.object({
@@ -361,7 +362,11 @@ export default function EventForm({
         <Button
           type="button"
           onClick={() => setDelDialogOpen(true)}
-          className="col-span-2 row-start-2 col-start-3 bg-red-500 border border-white hover:bg-red-400 flex justify-evenly items-center"
+          className={cn(
+            mode === "create" &&
+              "col-span-2 row-start-2 col-start-3 bg-red-500 border border-white hover:bg-red-400 flex justify-evenly items-center",
+            "hidden",
+          )}
         >
           Supprimer réunion
           <Trash2 className="text-white w-5" />

@@ -25,7 +25,7 @@ export default function MainBreadcrumb({
               {index === 0 && (
                 <div className="flex items-center">
                   <BreadcrumbLink href={item.link}>{item.label}</BreadcrumbLink>
-                  <BreadcrumbSeparator />
+                  {">"}
                 </div>
               )}
 
@@ -36,11 +36,11 @@ export default function MainBreadcrumb({
                     <BreadcrumbLink href={item.link}>
                       {item.label}
                     </BreadcrumbLink>
-                    <BreadcrumbSeparator />
+                    {">"}
                   </div>
                   <div className="flex md:hidden items-center">
                     <p>...</p>
-                    <BreadcrumbSeparator />
+                    {">"}
                   </div>
                 </>
               )}
