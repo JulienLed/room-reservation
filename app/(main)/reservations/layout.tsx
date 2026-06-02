@@ -1,10 +1,11 @@
 //Layout de Reservation, pour implémenter la SidebarReservation
 
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import SidebarReservation from "./SidebarReservation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import MainBreadcrumb from "@/components/layout/breadcrumb/MainBreadcrumb";
+import SheetReservation from "./SheetReservation";
 
 export default async function SidebarLayout({
   children,
@@ -36,11 +37,16 @@ export default async function SidebarLayout({
   ];
   return (
     <>
-      <div className="w-full flex justify-start! pl-10">
+      <div className="w-full flex justify-start! md:pl-10">
         <MainBreadcrumb items={items} />
       </div>
+      <div className="md:hidden flex justify-center w-full">
+        <SheetReservation datas={datas} />
+      </div>
       <SidebarProvider>
-        <SidebarReservation datas={datas} />
+        <div className="hidden md:flex">
+          <SidebarReservation datas={datas} />
+        </div>
         <main className="flex-1 flex flex-col w-full">{children}</main>
       </SidebarProvider>
     </>

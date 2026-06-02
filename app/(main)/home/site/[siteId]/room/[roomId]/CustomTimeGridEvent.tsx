@@ -34,7 +34,7 @@ export default function CustomTimeGridEvent({ calendarEvent }: props) {
             <strong>{calendarEvent.title}</strong>
           </h3>
           <SquarePen
-            className="absolute bottom-1 right-1 w-5"
+            className="md:hidden absolute bottom-1 right-1 w-4"
             onClick={() => {
               (setOpen(true), setMode("update"), setEvent(calendarEvent));
             }}

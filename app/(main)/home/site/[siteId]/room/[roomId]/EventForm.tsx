@@ -242,6 +242,8 @@ export default function EventForm({
             );
           }}
         />
+
+        {/* L'input pour le début de la réunion */}
         <Controller
           name="hour_from"
           control={form.control}
@@ -263,6 +265,8 @@ export default function EventForm({
             );
           }}
         />
+
+        {/* L'input pour la fin de la réunion */}
         <Controller
           name="hour_to"
           control={form.control}
@@ -284,6 +288,7 @@ export default function EventForm({
             );
           }}
         />
+
         {/* Le controleur pour un Combobox avec des Chips pour les participants à la réunion */}
         <Controller
           name="attendees"
@@ -359,18 +364,16 @@ export default function EventForm({
         >
           Annuler
         </Button>
-        <Button
-          type="button"
-          onClick={() => setDelDialogOpen(true)}
-          className={cn(
-            mode === "create" &&
-              "col-span-2 row-start-2 col-start-3 bg-red-500 border border-white hover:bg-red-400 flex justify-evenly items-center",
-            "hidden",
-          )}
-        >
-          Supprimer réunion
-          <Trash2 className="text-white w-5" />
-        </Button>
+        {mode === "update" && (
+          <Button
+            type="button"
+            onClick={() => setDelDialogOpen(true)}
+            className="col-span-2 row-start-2 col-start-3 bg-red-500 border border-white hover:bg-red-400 flex justify-evenly items-center"
+          >
+            Supprimer réunion
+            <Trash2 className="text-white w-5" />
+          </Button>
+        )}
         <ConfirmDialog
           open={delDialogOpen}
           setOpen={setDelDialogOpen}

@@ -17,15 +17,9 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Meeting, Room, Site } from "@/generated/prisma/client";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
-
-type datasProps = {
-  rooms: Room[];
-  sites: Site[];
-  meetings: Meeting[];
-};
+import { datasProps } from "./type";
 
 export default function SidebarReservation({ datas }: { datas: datasProps }) {
   const { rooms, sites, meetings } = datas;
@@ -42,7 +36,7 @@ export default function SidebarReservation({ datas }: { datas: datasProps }) {
   };
 
   return (
-    <Sidebar variant="floating" className="h-fit mt-[10%] ml-[10%]">
+    <Sidebar variant="floating" className="h-fit mt-50 ml-[10%]">
       <SidebarHeader>Vos réservations</SidebarHeader>
       <SidebarContent>
         {sites.map((site) => (
