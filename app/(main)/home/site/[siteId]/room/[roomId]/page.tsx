@@ -61,7 +61,7 @@ export default async function Page({
   ];
   return (
     <div className="flex flex-col items-center w-full">
-      <div className="w-full flex justify-start! md:pl-10">
+      <div className="w-full flex justify-start! pl-5 md:pl-10">
         <MainBreadcrumb items={items} />
       </div>
       <h2 className="text-center">Veuillez choisir un créneau disponible</h2>

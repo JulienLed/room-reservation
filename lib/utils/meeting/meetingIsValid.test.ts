@@ -1,10 +1,12 @@
 import { describe, expect, test } from "vitest";
 import meetingIsValid from "./meetingIsValid";
+import { ERRORS } from "./meetingErrors";
 
 const now = new Date();
 
 const makeTomorrowDateTime = (hour: number, minute = 0) => {
   const date = new Date(now);
+  date.setDate(date.getDate() + 1);
   date.setHours(hour, minute, 0, 0);
   return date;
 };
@@ -24,7 +26,7 @@ describe("meetingIsValid", () => {
         },
         [],
       ),
-    ).toBe(false);
+    ).toStrictEqual({ success: false, message: ERRORS.HOUR_ORDER });
   });
   test("vérifie que l'heure de fin est au moins 1h plus grande que l'heure de début", () => {
     expect(
@@ -39,7 +41,7 @@ describe("meetingIsValid", () => {
         },
         [],
       ),
-    ).toBe(false);
+    ).toStrictEqual({ success: false, message: ERRORS.MIN_MEETING_TIME });
   });
   test("vérifie que l'heure de début est au plus tôt 30 minutes après maintenant", () => {
     let now = new Date();
@@ -58,7 +60,7 @@ describe("meetingIsValid", () => {
         },
         [],
       ),
-    ).toBe(false);
+    ).toStrictEqual({ success: false, message: ERRORS.TOO_EARLY });
   });
   test("vérifie si l'heure de fin n'est pas après 16h le même jour", () => {
     expect(
@@ -74,7 +76,7 @@ describe("meetingIsValid", () => {
         },
         [],
       ),
-    ).toBe(false);
+    ).toStrictEqual({ success: false, message: ERRORS.HOUR_MAX });
   });
   test("vérifie si l'heure de début n'est pas avant 8h le même jour", () => {
     expect(
@@ -90,7 +92,26 @@ describe("meetingIsValid", () => {
         },
         [],
       ),
-    ).toBe(false);
+    ).toStrictEqual({ success: false, message: ERRORS.HOUR_MIN });
+  });
+  test("Vérifie que l'heure de début ne soit pas dans le passé", async () => {
+    let now = new Date();
+    const dateOneHourBefore = new Date(now.getTime() - 60 * 60 * 1000);
+    const dateOneHourAfter = new Date(now.getTime() + 60 * 60 * 1000);
+    expect(
+      meetingIsValid(
+        {
+          id: 1,
+          name: "Réunion test",
+          hour_from: dateOneHourBefore,
+          hour_to: dateOneHourAfter,
+          roomId: 1,
+          authorId: "123456789",
+          attendees: [],
+        },
+        [],
+      ),
+    ).toStrictEqual({ success: false, message: ERRORS.HOUR_FROM_IN_PAST });
   });
   test("vérifie que l'heure de début ne soit pas entre l'heure de début et de fin d'une réunion existente", async () => {
     //Mocks datas d'un retour prisma
@@ -133,7 +154,7 @@ describe("meetingIsValid", () => {
         },
         prismaDatas,
       ),
-    ).toBe(false);
+    ).toStrictEqual({ success: false, message: ERRORS.CONFLICT });
   });
   test("vérifie que l'heure de début et l'heure de fin d'une réunion existante ne peut être compris entre l'heure de début et l'heure de fin de la nouvelle réunion", () => {
     //Mocks datas d'un retour prisma
@@ -176,7 +197,7 @@ describe("meetingIsValid", () => {
         },
         prismaDatas,
       ),
-    ).toBe(false);
+    ).toStrictEqual({ success: false, message: ERRORS.CONFLICT });
   });
   test("vérifie que name est rempli", () => {
     expect(
@@ -192,7 +213,7 @@ describe("meetingIsValid", () => {
         },
         [],
       ),
-    ).toBe(false);
+    ).toStrictEqual({ success: false, message: ERRORS.NAME });
   });
   test("vérifie que hour_from est rempli", () => {
     expect(
@@ -208,7 +229,7 @@ describe("meetingIsValid", () => {
         },
         [],
       ),
-    ).toBe(false);
+    ).toStrictEqual({ success: false, message: ERRORS.HOUR_FROM });
   });
   test("vérifie que hour_to est rempli", () => {
     expect(
@@ -224,7 +245,7 @@ describe("meetingIsValid", () => {
         },
         [],
       ),
-    ).toBe(false);
+    ).toStrictEqual({ success: false, message: ERRORS.HOUR_TO });
   });
   test("vérifie que tout est ok", async () => {
     //Mocks datas d'un retour prisma
@@ -267,6 +288,6 @@ describe("meetingIsValid", () => {
         },
         prismaDatas,
       ),
-    ).toBe(true);
+    ).toStrictEqual({ success: true, message: "La réunion est validée" });
   });
 });

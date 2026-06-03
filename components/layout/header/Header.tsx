@@ -13,7 +13,7 @@ export default async function Header() {
       >
         <House className="w-10 h-10 text-foreground" />
       </Link>
-      <h1 className="row-start-2 md:row-start-1 md:col-start-2 col-span-2 md:col-span-1 mx-auto text-center">
+      <h1 className="row-start-2 md:row-start-1 md:col-start-2 col-span-2 md:col-span-1 mx-auto px-5 md:px-0 text-center">
         Application de réservation de salle
       </h1>
       <div className="md:justify-self-end p-2">

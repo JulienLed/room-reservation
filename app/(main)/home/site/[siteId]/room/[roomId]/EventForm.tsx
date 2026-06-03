@@ -148,10 +148,7 @@ export default function EventForm({
         toast("Réunion bien enregistrée");
         router.refresh();
       } else {
-        toast(
-          "Problème lors de l'enregistrement de la réunion : " +
-            response.message,
-        );
+        toast(response.message as string);
       }
     }
 
@@ -192,10 +189,7 @@ export default function EventForm({
         toast("Réunion bien modifiée");
         router.refresh();
       } else {
-        toast(
-          "Problème lors de l'enregistrement de la réunion : " +
-            response.message,
-        );
+        toast(response.message as string);
       }
     }
   };

@@ -1,3 +1,7 @@
+// Composant Sheet pour afficher le menu en version mobile
+
+"use client";
+
 import {
   Accordion,
   AccordionContent,
@@ -15,9 +19,13 @@ import { Menu } from "lucide-react";
 import { datasProps } from "./type";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function SheetReservation({ datas }: { datas: datasProps }) {
   const { rooms, sites, meetings } = datas;
+
+  const [open, setOpen] = useState<boolean>();
 
   //Fonction pour compter le nombre de meeting par site
   const meetingsBySite = (siteId: number) => {
@@ -31,9 +39,9 @@ export default function SheetReservation({ datas }: { datas: datasProps }) {
   };
 
   return (
-    <Sheet>
-      <SheetTrigger>
-        <Menu className="w-10" />
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button className="w-[90%]">Sélection de la salle</Button>
       </SheetTrigger>
       <SheetContent side="left">
         <SheetHeader>
@@ -48,11 +56,11 @@ export default function SheetReservation({ datas }: { datas: datasProps }) {
                   {rooms.map(
                     (room) =>
                       room.siteId === site.id && (
-                        // Il faut enlever les soulignage et rendre responsive la page
                         <li key={room.id}>
                           <Link
                             href={`reservations?roomId=${room.id}`}
-                            className="flex justify-between w-full"
+                            className="flex justify-between w-full no-underline!"
+                            onClick={() => setOpen(!open)}
                           >
                             <div className="flex gap-1">
                               <span className="text-2xs">{room.name}</span>

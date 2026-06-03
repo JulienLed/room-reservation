@@ -72,7 +72,7 @@ export default async function Page({
   });
 
   return (
-    <div className="flex flex-col w-[50%] mx-auto mt-5">
+    <div className="flex flex-col w-[90%] md:w-[50%] mx-auto mt-5">
       <Card>
         <CardHeader>
           <CardTitle>{site.name}</CardTitle>

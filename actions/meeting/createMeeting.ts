@@ -27,9 +27,10 @@ export default async function (newMeeting: MeetingFormDatas) {
       },
     });
 
-    //Si les données sont incorrectes, on lance une erreur
-    if (!meetingIsValid(newMeeting, meetings))
-      throw new Error("Les données de la réunion ne sont pas valides");
+    //Si les données sont incorrectes, on return l'erreur qui provient de la fonction de vérification
+    const response = meetingIsValid(newMeeting, meetings);
+    if (!response.success)
+      return { success: false as const, message: response.message };
 
     //Créer la réunion
     const meetingToCreate = await prisma.meeting.create({
