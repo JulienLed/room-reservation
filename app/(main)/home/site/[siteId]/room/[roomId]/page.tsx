@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import MainBreadcrumb from "@/components/layout/breadcrumb/MainBreadcrumb";
 import Agenda from "./Agenda";
+import { notFound } from "next/navigation";
 
 export default async function Page({
   params,
@@ -43,6 +44,7 @@ export default async function Page({
       site: true,
     },
   });
+  if (!room) return notFound();
 
   //Items à passer au breadcrumb
   const items = [
@@ -51,11 +53,11 @@ export default async function Page({
       link: "/home",
     },
     {
-      label: room!.site!.name,
+      label: room.site.name,
       link: `/home/site/${siteId}`,
     },
     {
-      label: room!.name,
+      label: room.name,
       link: `/home/site/${siteId}/room/${roomId}`,
     },
   ];

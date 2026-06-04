@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import MainBreadcrumb from "@/components/layout/breadcrumb/MainBreadcrumb";
+import { notFound } from "next/navigation";
 
 export default async function Page({
   params,
@@ -22,6 +23,7 @@ export default async function Page({
       site: true,
     },
   });
+  if (!rooms) return notFound();
 
   //Items à passer au breadcrumb
   const items = [

@@ -15,20 +15,20 @@ import { useRouter } from "next/navigation";
 export default function Error() {
   const router = useRouter();
   return (
-    <div>
-      <Card>
+    <div className="flex justify-center items-center w-full min-h-screen">
+      <Card className="h-fit w-100">
         <CardHeader>
-          <CardTitle>Oups, il semble qu'il y ait eu une erreur...</CardTitle>
-          <CardDescription>
+          <CardTitle className="mx-auto">
+            Oups, il semble qu'il y ait eu une erreur...
+          </CardTitle>
+          <CardDescription className="mx-auto">
             Une erreur est survenue, veuillez réessayer
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="flex justify-center items-center w-[50%]">
-            <Button onClick={() => router.back()}>
-              Revenir en terrain connu
-            </Button>
-          </div>
+        <CardContent className="mx-auto">
+          <Button onClick={() => router.replace("/")}>
+            Revenir en terrain connu
+          </Button>
         </CardContent>
       </Card>
     </div>

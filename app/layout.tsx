@@ -2,16 +2,13 @@
 
 import type { Metadata } from "next";
 import "./globals.css";
-import { Nunito_Sans, Montserrat } from "next/font/google";
+import { Nunito_Sans, Montserrat, Outfit, Oxanium } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-const montserratHeading = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-heading",
-});
+const oxaniumHeading = Oxanium({subsets:['latin'],variable:'--font-heading'});
 
-const nunitoSans = Nunito_Sans({ subsets: ["latin"], variable: "--font-sans" });
+const outfit = Outfit({subsets:['latin'],variable:'--font-sans'});
 
 export const metadata: Metadata = {
   title: "Réservation de salle",
@@ -28,8 +25,8 @@ export default function RootLayout({
       lang="fr"
       className={cn(
         "font-sans",
-        nunitoSans.variable,
-        montserratHeading.variable,
+        outfit.variable,
+        oxaniumHeading.variable,
       )}
     >
       <body className="flex flex-col items-center min-h-screen">
