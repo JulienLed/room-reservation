@@ -6,7 +6,7 @@ import Link from "next/link";
 export default async function Header() {
   const session = await auth();
   return (
-    <div className="grid grid-cols-2 md:grid-cols-[27%_46%_27%]">
+    <div className="grid grid-cols-2 md:grid-cols-[27%_46%_27%] animate-fade z-0">
       <Link
         className="col-start-1 md:justify-self-start p-1 md:p-2"
         href={"/home"}

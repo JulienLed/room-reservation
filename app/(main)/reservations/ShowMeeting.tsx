@@ -40,17 +40,21 @@ export default async function ShowMeeting({
 
       <section id="meeting-info" className="flex flex-col justify-between">
         <h4 className="font-bold">{meeting.name}</h4>
-        <p className="text-muted-foreground">
-          {`${getTimeFormatedToString(
-            meeting.hour_from.getHours(),
-            meeting.hour_from.getMinutes(),
-          )} - ${getTimeFormatedToString(
-            meeting.hour_to.getHours(),
-            meeting.hour_to.getMinutes(),
-          )}`}
-          {" · "}
-          <span>{`${meeting.attendees.length} participants`}</span>
-        </p>
+        <div className="flex flex-col md:flex-row gap-2">
+          <p className="text-muted-foreground">
+            {`${getTimeFormatedToString(
+              meeting.hour_from.getHours(),
+              meeting.hour_from.getMinutes(),
+            )} - ${getTimeFormatedToString(
+              meeting.hour_to.getHours(),
+              meeting.hour_to.getMinutes(),
+            )}`}
+          </p>
+          <p className="hidden md:flex">{" · "}</p>
+          <p className="text-muted-foreground">
+            {`${meeting.attendees.length} participants`}
+          </p>
+        </div>
       </section>
 
       <section id="meeting-status">

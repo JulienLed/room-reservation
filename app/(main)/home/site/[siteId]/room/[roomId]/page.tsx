@@ -66,8 +66,13 @@ export default async function Page({
       <div className="w-full flex justify-start! pl-5 md:pl-10">
         <MainBreadcrumb items={items} />
       </div>
-      <h2 className="text-center">Veuillez choisir un créneau disponible</h2>
-      <section id="agenda" className="w-full px-5 pb-5 md:pb-10 md:px-10">
+      <h2 className="text-center animate-fade">
+        Veuillez choisir un créneau disponible
+      </h2>
+      <section
+        id="agenda"
+        className="w-full px-5 pb-5 md:pb-10 md:px-10 animate-fade-up"
+      >
         <Agenda
           meetings={meetings}
           room={room!}

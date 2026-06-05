@@ -7,7 +7,7 @@ export default function Page() {
   return (
     <section
       id="connexion"
-      className="flex-1 flex justify-center items-center w-full"
+      className="flex-1 flex justify-center items-center w-full animate-fade-up"
     >
       {/* Card avec les options de connections */}
       <Card className="w-65">

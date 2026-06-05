@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import { datasProps } from "./type";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -49,8 +49,16 @@ export default function SheetReservation({ datas }: { datas: datasProps }) {
         </SheetHeader>
         <Accordion type="single" collapsible>
           {sites.map((site) => (
-            <AccordionItem value={site.name} key={site.id}>
-              <AccordionTrigger>{site.name}</AccordionTrigger>
+            <AccordionItem value={site.name} key={site.id} className="group">
+              <AccordionTrigger>
+                <div className="w-full grid grid-cols-[1fr_auto_auto]">
+                  <p>{site.name}</p>
+                  <Badge className="justify-self-end w-7">
+                    {meetingsBySite(site.id)}
+                  </Badge>
+                  <ChevronDown className="group-data-[state=open]:rotate-180 transition-transform duration-300 justify-self-end" />
+                </div>
+              </AccordionTrigger>
               <AccordionContent>
                 <ul>
                   {rooms.map(
@@ -65,7 +73,7 @@ export default function SheetReservation({ datas }: { datas: datasProps }) {
                             <div className="flex gap-1">
                               <span className="text-2xs">{room.name}</span>
                             </div>
-                            <Badge>
+                            <Badge className="w-7">
                               {
                                 meetings.filter(
                                   (meeting) => meeting.roomId === room.id,

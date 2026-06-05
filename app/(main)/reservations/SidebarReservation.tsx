@@ -49,7 +49,7 @@ export default function SidebarReservation({ datas }: { datas: datasProps }) {
                   </div>
                   <div className="flex items-center justify-between gap-1 w-full">
                     {site.name}
-                    <Badge>{meetingsBySite(site.id)}</Badge>
+                    <Badge className="w-7">{meetingsBySite(site.id)}</Badge>
                   </div>
                 </CollapsibleTrigger>
               </SidebarGroupLabel>
@@ -68,7 +68,7 @@ export default function SidebarReservation({ datas }: { datas: datasProps }) {
                               <div className="flex gap-1">
                                 <span className="text-2xs">{room.name}</span>
                               </div>
-                              <Badge>
+                              <Badge className="w-7">
                                 {
                                   meetings.filter(
                                     (meeting) => meeting.roomId === room.id,

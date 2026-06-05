@@ -23,7 +23,7 @@ export default async function Page({
 
   if (!roomId)
     return (
-      <div className="flex-1 flex justify-center w-full">
+      <div className="flex-1 flex justify-center w-full animate-fade">
         <p className="text-muted-foreground">Veuillez sélectionner une salle</p>
       </div>
     );
@@ -72,13 +72,13 @@ export default async function Page({
   });
 
   return (
-    <div className="flex flex-col w-[90%] md:w-[50%] mx-auto mt-5">
+    <div className="flex flex-col w-[90%] md:w-[50%] mx-auto mt-5 animate-fade-up">
       <Card>
         <CardHeader>
           <CardTitle>{site.name}</CardTitle>
           <CardDescription>{`${site.street}, ${site.streetNum} - ${site.zip_code}`}</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-2! md:p-5">
           <section id="room-reservations">
             <h3 className="text-base">{room.name}</h3>
             {meetings.length < 1 ? (

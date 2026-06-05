@@ -35,14 +35,13 @@ import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useState } from "react";
 import deleteMeeting from "@/actions/meeting/deleteMeeting";
 import { getTimeFormatedToString } from "@/lib/utils/temporal/temporalUtils";
-import { cn } from "@/lib/utils";
 
 //Les schema zod du form
 const formSchema = z.object({
   name: z
     .string()
     .min(1, "Veuillez choisir un nom d'évènement")
-    .max(30, "30 charactères macimum"),
+    .max(30, "30 charactères maximum"),
   hour_from: z.iso.time("Veuillez choisir une heure de début"),
   hour_to: z.iso.time("Veuillez choisir une heure de fin"),
   attendees: z.array(z.string()),

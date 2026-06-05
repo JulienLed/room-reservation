@@ -26,7 +26,10 @@ export default function Error() {
           </CardDescription>
         </CardHeader>
         <CardContent className="mx-auto">
-          <Button onClick={() => router.replace("/")}>
+          <Button
+            onClick={() => router.replace("/")}
+            className="hover:cursor-pointer"
+          >
             Revenir en terrain connu
           </Button>
         </CardContent>

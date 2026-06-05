@@ -31,7 +31,7 @@ export default function EventDialog({
   return (
     // Modal = false car sinon le combobox dans EventForm ne fonctionne pas
     <Dialog open={open} onOpenChange={setOpen} modal={false}>
-      {open && <div className="fixed inset-0 w-full bg-black/70"></div>}
+      {/* {open && <div className="fixed inset-0 w-full bg-black/70"></div>} */}
       <DialogContent
         className="z-100"
         onPointerDownOutside={(e) => e.preventDefault()}

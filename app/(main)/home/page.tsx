@@ -11,7 +11,7 @@ export default async function Page() {
   const sites = await prisma.site.findMany();
 
   return (
-    <div className="flex flex-col items-center w-full mb-5">
+    <div className="flex flex-col items-center w-full mb-5 animate-fade-up">
       <h2 className="text-center md:text-left">{`Bienvenue ${user} !`}</h2>
       <p className="mb-5 text-center">
         Vous pouvez ici réserver une salle de réunion parmis plusieurs sites de
@@ -24,8 +24,8 @@ export default async function Page() {
             <Link key={site.id} href={`/home/site/${site.id}`}>
               <Card className="hover:bg-accent duration-200">
                 <CardHeader>
-                  <CardTitle>{site.name}</CardTitle>
-                  <CardContent>
+                  <CardTitle className="mx-auto">{site.name}</CardTitle>
+                  <CardContent className="mx-auto p-2! md:p-5!">
                     {site.street} {site.streetNum} {site.zip_code}
                   </CardContent>
                 </CardHeader>

@@ -37,12 +37,12 @@ export default async function SidebarLayout({
   ];
   return (
     <>
-      <div className="md:hidden flex justify-center w-full mt-2">
+      <div className="md:hidden flex justify-center w-full mt-2 animate-fade">
         <SheetReservation datas={datas} />
       </div>
 
       <SidebarProvider>
-        <div className="hidden md:flex">
+        <div className="hidden md:flex animate-fade">
           <SidebarReservation datas={datas} />
         </div>
 

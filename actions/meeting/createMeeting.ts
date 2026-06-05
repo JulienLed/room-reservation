@@ -4,9 +4,24 @@ import { MeetingFormDatas } from "@/app/(main)/home/site/[siteId]/room/[roomId]/
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import meetingIsValid from "@/lib/utils/meeting/meetingIsValid";
+import z from "zod";
+
+const meetingFormSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Veuillez choisir un nom d'évènement")
+    .max(30, "30 charactères maximum"),
+  hour_from: z.iso.time("Veuillez choisir une heure de début"),
+  hour_to: z.iso.time("Veuillez choisir une heure de fin"),
+  attendees: z.array(z.string()),
+  roomId: z.number(),
+});
 
 export default async function (newMeeting: MeetingFormDatas) {
-  const { name, hour_from, hour_to, attendees, roomId } = newMeeting;
+  const parsed = meetingFormSchema.safeParse(newMeeting);
+  if (!parsed.success)
+    return { success: false as const, message: "Données invalides" };
+  const { name, hour_from, hour_to, attendees, roomId } = parsed.data;
 
   try {
     //Obtenir la session

@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import canDelete from "@/lib/utils/meeting/canDelete";
 
 export default async function deleteMeeting(id: number) {
+  //Créer et passer les infos clients par zod, puis return une erreur si parsed pas correcte
   try {
     //Obtenir la session
     const session = await auth();
