@@ -5,12 +5,27 @@ import { prisma } from "@/lib/prisma";
 import canModify from "@/lib/utils/meeting/canModify";
 import meetingIsValid from "@/lib/utils/meeting/meetingIsValid";
 import { MeetingFormDatas } from "@/app/(main)/home/site/[siteId]/room/[roomId]/type";
+import z from "zod";
+
+const meetingFormSchema = z.object({
+  name: z
+    .string()
+    .min(1, "Veuillez choisir un nom d'évènement")
+    .max(30, "30 charactères maximum"),
+  hour_from: z.iso.time("Veuillez choisir une heure de début"),
+  hour_to: z.iso.time("Veuillez choisir une heure de fin"),
+  attendees: z.array(z.string()),
+  roomId: z.number(),
+});
 
 export default async function (
   newMeeting: MeetingFormDatas,
   oldMeetingId: string,
 ) {
-  const { name, hour_from, hour_to, roomId, attendees } = newMeeting;
+  const parsed = meetingFormSchema.safeParse(newMeeting);
+  if (!parsed.success)
+    return { success: false as const, message: "Données invalides" };
+  const { name, hour_from, hour_to, roomId, attendees } = parsed.data;
   const id = oldMeetingId;
   try {
     //Obtenir la session
