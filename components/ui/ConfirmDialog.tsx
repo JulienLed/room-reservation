@@ -21,7 +21,7 @@ export default function ConfirmDialog({
 }) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent>
+      <AlertDialogContent className="z-150">
         <AlertDialogHeader>
           <AlertDialogTitle>Veuillez confirmer</AlertDialogTitle>
           <AlertDialogDescription>

@@ -137,6 +137,9 @@
   li {
     @apply list-none
   }
+  button {
+    @apply cursor-pointer
+  }
 }
 
 /* Adapter max-width pour le date picker  de l'agenda en mode Mobile */
