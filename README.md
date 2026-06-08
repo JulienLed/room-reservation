@@ -2,7 +2,7 @@
 
 Application de réservation de salles de réunion multi-sites. Permet aux collaborateurs de consulter la disponibilité des salles, de créer, modifier et supprimer des réservations via un calendrier interactif.
 
-![Image de l'application](Agenda.png "Agenda")
+![Image de l'application](./public/Agenda.png)
 
 ## Fonctionnalités
 
