@@ -11,16 +11,18 @@ const meetingFormSchema = z.object({
     .string()
     .min(1, "Veuillez choisir un nom d'évènement")
     .max(30, "30 charactères maximum"),
-  hour_from: z.iso.time("Veuillez choisir une heure de début"),
-  hour_to: z.iso.time("Veuillez choisir une heure de fin"),
+  hour_from: z.coerce.date("Veuillez choisir une heure de début"),
+  hour_to: z.coerce.date("Veuillez choisir une heure de fin"),
   attendees: z.array(z.string()),
   roomId: z.number(),
 });
 
 export default async function (newMeeting: MeetingFormDatas) {
   const parsed = meetingFormSchema.safeParse(newMeeting);
-  if (!parsed.success)
+  if (!parsed.success) {
     return { success: false as const, message: "Données invalides" };
+  }
+
   const { name, hour_from, hour_to, attendees, roomId } = parsed.data;
 
   try {
