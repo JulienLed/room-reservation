@@ -1,6 +1,7 @@
 //Composant client du form de l'event
 
 "use client";
+
 import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,9 +33,10 @@ import { CalendarEventExternal } from "@schedule-x/calendar";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import deleteMeeting from "@/actions/meeting/deleteMeeting";
 import { getTimeFormatedToString } from "@/lib/utils/temporal/temporalUtils";
+import { Spinner } from "@/components/ui/spinner";
 
 //Les schema zod du form
 const formSchema = z.object({
@@ -70,6 +72,9 @@ export default function EventForm({
 
   //Le state qui ouvre ou ferme la confirmation de suppression de la réunion
   const [delDialogOpen, setDelDialogOpen] = useState<boolean>(false);
+
+  //Permet d'afficher quelque chose durant le chargement des données
+  const [isPending, startTransition] = useTransition();
 
   //Valeurs par défault de l'event, en fonction du mode "create" ou "update"
   const defaultValues =
@@ -107,90 +112,95 @@ export default function EventForm({
   });
 
   //Le onSumbit va lancer les infos du meeting à la server action
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    const { name, hour_from, hour_to, attendees } = data;
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    startTransition(async () => {
+      const { name, hour_from, hour_to, attendees } = data;
 
-    //Si on doit créer un évènement
-    if (mode === "create") {
-      //eventDateTime sera toujours défini dans le cas d'un create, mais on indique return pour que typescript soit content
-      if (!eventDateTime) return;
+      //Si on doit créer un évènement
+      if (mode === "create") {
+        //eventDateTime sera toujours défini dans le cas d'un create, mais on indique return pour que typescript soit content
+        if (!eventDateTime) return;
 
-      //On obtient les heures et minutes de début et de fin de l'évènement, puis on créer une date avec ces données et celle initiales fournies par schedule-x
-      const [hourFrom, minuteFrom] = hour_from.split(":").map(Number);
-      const [hourTo, minuteTo] = hour_to.split(":").map(Number);
-      const dateFrom = new Date(
-        eventDateTime.year,
-        eventDateTime.month - 1,
-        eventDateTime.day,
-        hourFrom,
-        minuteFrom,
-      );
-      const dateTo = new Date(
-        eventDateTime.year,
-        eventDateTime.month - 1,
-        eventDateTime.day,
-        hourTo,
-        minuteTo,
-      );
-      const formatedDatas = {
-        name,
-        hour_from: dateFrom,
-        hour_to: dateTo,
-        attendees,
-        roomId,
-      };
+        //On obtient les heures et minutes de début et de fin de l'évènement, puis on créer une date avec ces données et celle initiales fournies par schedule-x
+        const [hourFrom, minuteFrom] = hour_from.split(":").map(Number);
+        const [hourTo, minuteTo] = hour_to.split(":").map(Number);
+        const dateFrom = new Date(
+          eventDateTime.year,
+          eventDateTime.month - 1,
+          eventDateTime.day,
+          hourFrom,
+          minuteFrom,
+        );
+        const dateTo = new Date(
+          eventDateTime.year,
+          eventDateTime.month - 1,
+          eventDateTime.day,
+          hourTo,
+          minuteTo,
+        );
+        const formatedDatas = {
+          name,
+          hour_from: dateFrom,
+          hour_to: dateTo,
+          attendees,
+          roomId,
+        };
 
-      //On créer l'event via server action, et on refresh pour activer le useState de Agenda et refetch les events.
-      const response = await createMeeting(formatedDatas);
-      if (response.success) {
-        setOpen(false);
-        toast("Réunion bien enregistrée");
-        router.refresh();
-      } else {
-        toast(response.message as string);
+        //On créer l'event via server action, et on refresh pour activer le useState de Agenda et refetch les events.
+        const response = await createMeeting(formatedDatas);
+        if (response.success) {
+          setOpen(false);
+          toast("Réunion bien enregistrée");
+          router.refresh();
+        } else {
+          toast(response.message as string);
+        }
       }
-    }
 
-    //Si on doit modifier l'évènement
-    else if (mode === "update") {
-      //event sera toujours défini dans le cas d'un update, mais on indique return pour que typescript soit content
-      if (!event) return;
+      //Si on doit modifier l'évènement
+      else if (mode === "update") {
+        //event sera toujours défini dans le cas d'un update, mais on indique return pour que typescript soit content
+        if (!event) return;
 
-      //On obtient les heures et minutes de début et de fin de l'évènement, puis on créer une date avec ces données et celle initiales fournies par schedule-x
-      const [hourFrom, minuteFrom] = hour_from.split(":").map(Number);
-      const [hourTo, minuteTo] = hour_to.split(":").map(Number);
-      const dateFrom = new Date(
-        event.start.year,
-        event.start.month - 1,
-        event.start.day,
-        hourFrom,
-        minuteFrom,
-      );
-      const dateTo = new Date(
-        event.end.year,
-        event.end.month - 1,
-        event.end.day,
-        hourTo,
-        minuteTo,
-      );
-      const formatedDatas = {
-        name,
-        hour_from: dateFrom,
-        hour_to: dateTo,
-        attendees,
-        roomId,
-      };
+        //On obtient les heures et minutes de début et de fin de l'évènement, puis on créer une date avec ces données et celle initiales fournies par schedule-x
+        const [hourFrom, minuteFrom] = hour_from.split(":").map(Number);
+        const [hourTo, minuteTo] = hour_to.split(":").map(Number);
+        const dateFrom = new Date(
+          event.start.year,
+          event.start.month - 1,
+          event.start.day,
+          hourFrom,
+          minuteFrom,
+        );
+        const dateTo = new Date(
+          event.end.year,
+          event.end.month - 1,
+          event.end.day,
+          hourTo,
+          minuteTo,
+        );
+        const formatedDatas = {
+          name,
+          hour_from: dateFrom,
+          hour_to: dateTo,
+          attendees,
+          roomId,
+        };
 
-      //On modifie l'event via server action, et on refresh pour activer le useState de Agenda et refetch les events.
-      const response = await modifyMeeting(formatedDatas, event.id.toString());
-      if (response.success) {
-        setOpen(false);
-        toast("Réunion bien modifiée");
-        router.refresh();
-      } else {
-        toast(response.message as string);
+        //On modifie l'event via server action, et on refresh pour activer le useState de Agenda et refetch les events.
+        const response = await modifyMeeting(
+          formatedDatas,
+          event.id.toString(),
+        );
+        if (response.success) {
+          setOpen(false);
+          toast("Réunion bien modifiée");
+          router.refresh();
+        } else {
+          toast(response.message as string);
+        }
       }
-    }
+    });
   };
 
   //Fonction qui prends en charge les étapes de la suppression d'une réunion, passé au composant ConfirmDialog
@@ -348,7 +358,7 @@ export default function EventForm({
       </FieldGroup>
       <section id="form-buttons" className="grid grid-cols-4">
         <Button className="col-span-2" type="submit">
-          Enregistrer
+          {isPending ? <Spinner /> : "Enregistrer"}
         </Button>
         <Button
           type="button"
