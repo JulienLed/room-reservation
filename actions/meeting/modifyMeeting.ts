@@ -12,8 +12,9 @@ const meetingFormSchema = z.object({
     .string()
     .min(1, "Veuillez choisir un nom d'évènement")
     .max(30, "30 charactères maximum"),
-  hour_from: z.iso.time("Veuillez choisir une heure de début"),
-  hour_to: z.iso.time("Veuillez choisir une heure de fin"),
+  day: z.coerce.date("Veuillez choisir un jour"),
+  hour_from: z.coerce.date("Veuillez choisir une heure de début"),
+  hour_to: z.coerce.date("Veuillez choisir une heure de fin"),
   attendees: z.array(z.string()),
   roomId: z.number(),
 });
@@ -56,8 +57,9 @@ export default async function (
     if (!authorId) throw new Error("Pas de réunion avec ce ID");
 
     //Si les données sont incorrectes, on lance une erreur
-    if (!meetingIsValid(newMeeting, meetings))
-      throw new Error("Les données de la réunion ne sont pas valides");
+    const validation = meetingIsValid(parsed.data, meetings);
+    if (!validation.success)
+      return { success: false as const, message: validation.message };
 
     //Vérification de l'auteur de la réunion pour modification
     if (!canModify(authorId.authorId, userId))

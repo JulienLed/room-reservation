@@ -11,6 +11,7 @@ const meetingFormSchema = z.object({
     .string()
     .min(1, "Veuillez choisir un nom d'évènement")
     .max(30, "30 charactères maximum"),
+  day: z.coerce.date("Veuillez choisir un jour"),
   hour_from: z.coerce.date("Veuillez choisir une heure de début"),
   hour_to: z.coerce.date("Veuillez choisir une heure de fin"),
   attendees: z.array(z.string()),
@@ -45,7 +46,7 @@ export default async function (newMeeting: MeetingFormDatas) {
     });
 
     //Si les données sont incorrectes, on return l'erreur qui provient de la fonction de vérification
-    const response = meetingIsValid(newMeeting, meetings);
+    const response = meetingIsValid(parsed.data, meetings);
     if (!response.success)
       return { success: false as const, message: response.message };
 

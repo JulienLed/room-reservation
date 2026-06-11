@@ -14,7 +14,7 @@ export function getTimeFormatedToString(hour: number, minute: number) {
   return formatedHour;
 }
 
-//Fonction pour obtenir une date sn string "aaaa-mm-dd"
+//Fonction pour obtenir une date en string "aaaa-mm-dd"
 export function getDateFormatedToString(date: Date) {
   const day = date.getDate().toString().padStart(2, "0");
   const month = (date.getMonth() + 1).toString().padStart(2, "0");

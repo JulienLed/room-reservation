@@ -35,7 +35,10 @@ import { Trash2 } from "lucide-react";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useState, useTransition } from "react";
 import deleteMeeting from "@/actions/meeting/deleteMeeting";
-import { getTimeFormatedToString } from "@/lib/utils/temporal/temporalUtils";
+import {
+  getDateFormatedToString,
+  getTimeFormatedToString,
+} from "@/lib/utils/temporal/temporalUtils";
 import { Spinner } from "@/components/ui/spinner";
 
 //Les schema zod du form
@@ -44,6 +47,7 @@ const formSchema = z.object({
     .string()
     .min(1, "Veuillez choisir un nom d'évènement")
     .max(30, "30 charactères maximum"),
+  day: z.string("Veuillez choiri un jour"),
   hour_from: z.iso.time("Veuillez choisir une heure de début"),
   hour_to: z.iso.time("Veuillez choisir une heure de fin"),
   attendees: z.array(z.string()),
@@ -81,6 +85,9 @@ export default function EventForm({
     mode === "create"
       ? {
           name: "",
+          day: eventDateTime
+            ? (eventDateTime as Temporal.ZonedDateTime).toPlainDate().toString()
+            : getDateFormatedToString(new Date()),
           hour_from: getTimeFormatedToString(
             eventDateTime!.hour,
             eventDateTime!.minute,
@@ -90,6 +97,9 @@ export default function EventForm({
         }
       : {
           name: event!.title,
+          day: (event!.start as Temporal.ZonedDateTime)
+            .toPlainDate()
+            .toString(),
           hour_from: getTimeFormatedToString(
             (event!.start as Temporal.ZonedDateTime).hour,
             (event!.start as Temporal.ZonedDateTime).minute,
@@ -114,7 +124,7 @@ export default function EventForm({
   //Le onSumbit va lancer les infos du meeting à la server action
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     startTransition(async () => {
-      const { name, hour_from, hour_to, attendees } = data;
+      const { name, day, hour_from, hour_to, attendees } = data;
 
       //Si on doit créer un évènement
       if (mode === "create") {
@@ -122,24 +132,21 @@ export default function EventForm({
         if (!eventDateTime) return;
 
         //On obtient les heures et minutes de début et de fin de l'évènement, puis on créer une date avec ces données et celle initiales fournies par schedule-x
+        const [year, month, dayNum] = day.split("-").map(Number);
         const [hourFrom, minuteFrom] = hour_from.split(":").map(Number);
         const [hourTo, minuteTo] = hour_to.split(":").map(Number);
         const dateFrom = new Date(
-          eventDateTime.year,
-          eventDateTime.month - 1,
-          eventDateTime.day,
+          year,
+          month - 1,
+          dayNum,
           hourFrom,
           minuteFrom,
         );
-        const dateTo = new Date(
-          eventDateTime.year,
-          eventDateTime.month - 1,
-          eventDateTime.day,
-          hourTo,
-          minuteTo,
-        );
+        const dateTo = new Date(year, month - 1, dayNum, hourTo, minuteTo);
+        const dayFormated = new Date(day);
         const formatedDatas = {
           name,
+          day: dayFormated,
           hour_from: dateFrom,
           hour_to: dateTo,
           attendees,
@@ -163,24 +170,21 @@ export default function EventForm({
         if (!event) return;
 
         //On obtient les heures et minutes de début et de fin de l'évènement, puis on créer une date avec ces données et celle initiales fournies par schedule-x
+        const [year, month, dayNum] = day.split("-").map(Number);
         const [hourFrom, minuteFrom] = hour_from.split(":").map(Number);
         const [hourTo, minuteTo] = hour_to.split(":").map(Number);
         const dateFrom = new Date(
-          event.start.year,
-          event.start.month - 1,
-          event.start.day,
+          year,
+          month - 1,
+          dayNum,
           hourFrom,
           minuteFrom,
         );
-        const dateTo = new Date(
-          event.end.year,
-          event.end.month - 1,
-          event.end.day,
-          hourTo,
-          minuteTo,
-        );
+        const dateTo = new Date(year, month - 1, dayNum, hourTo, minuteTo);
+        const dayFormated = new Date(day);
         const formatedDatas = {
           name,
+          day: dayFormated,
           hour_from: dateFrom,
           hour_to: dateTo,
           attendees,
@@ -241,6 +245,27 @@ export default function EventForm({
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
+              </Field>
+            );
+          }}
+        />
+
+        {/* L'input du jour de la réunion */}
+        <Controller
+          name="day"
+          control={form.control}
+          render={({ field, fieldState }) => {
+            return (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="day">Jour de la réunion</FieldLabel>
+                <Input
+                  {...field}
+                  id="day"
+                  type="date"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="Jour de la réunion"
+                  autoComplete="off"
+                />
               </Field>
             );
           }}
@@ -373,7 +398,7 @@ export default function EventForm({
             onClick={() => setDelDialogOpen(true)}
             className="col-span-2 row-start-2 col-start-3 bg-red-500 border border-white hover:bg-red-400 flex justify-evenly items-center"
           >
-            Supprimer réunion
+            Supprimer
             <Trash2 className="text-white w-5" />
           </Button>
         )}

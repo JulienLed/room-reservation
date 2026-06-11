@@ -17,6 +17,7 @@ export type UsersWithIdAndName = Record<string, string>[];
 export type MeetingFormDatas = {
   id?: number;
   name: string;
+  day: Date;
   hour_from: Date;
   hour_to: Date;
   attendees: string[];
